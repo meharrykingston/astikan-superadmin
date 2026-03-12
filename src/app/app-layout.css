@@ -25,6 +25,83 @@
   font-size: 0.85rem;
 }
 
+.superadmin-search {
+  min-height: 38px;
+  border-radius: 10px;
+  border: 1px solid #d5dff2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  margin-bottom: 12px;
+  background: #fff;
+}
+
+.superadmin-search svg {
+  color: #4f648b;
+}
+
+.superadmin-search input {
+  border: 0;
+  outline: none;
+  width: 100%;
+  background: transparent;
+  color: #2a3d60;
+}
+
+.superadmin-illustration-card {
+  border: 1px solid #d6def0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #eef4ff 0%, #f7fbff 54%, #ffffff 100%);
+  padding: 12px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.superadmin-orbit {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid #c8d8ff;
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 30% 30%, #4f90ff, #1f55d8);
+}
+
+.superadmin-orbit i {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed rgba(34, 93, 214, 0.35);
+}
+
+.superadmin-orbit i:nth-child(1) {
+  width: 18px;
+  height: 18px;
+}
+
+.superadmin-orbit i:nth-child(2) {
+  width: 30px;
+  height: 30px;
+}
+
+.superadmin-orbit i:nth-child(3) {
+  width: 44px;
+  height: 44px;
+}
+
+.superadmin-illustration-card strong {
+  display: block;
+  font-size: 0.88rem;
+}
+
+.superadmin-illustration-card small {
+  color: #5e6f8d;
+  font-size: 0.77rem;
+}
+
 .superadmin-sidebar nav {
   display: grid;
   gap: 8px;
@@ -37,13 +114,22 @@
   color: #2f3c56;
   display: flex;
   align-items: center;
+  gap: 8px;
   padding: 0 11px;
   font-size: 0.92rem;
+  border: 1px solid transparent;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.superadmin-nav-item:hover {
+  background: #f4f7ff;
+  border-color: #dbe4f8;
 }
 
 .superadmin-nav-item.active {
   background: #edf2ff;
   color: #1f4cc1;
+  border-color: #d2def8;
   font-weight: 700;
 }
 
@@ -53,8 +139,46 @@
 
 .superadmin-topbar {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 10px;
   margin-bottom: 8px;
+}
+
+.superadmin-topbar-left {
+  margin-right: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.status-chip {
+  border-radius: 999px;
+  border: 1px solid #cbddff;
+  background: #edf4ff;
+  color: #2554b8;
+  font-size: 0.75rem;
+  padding: 5px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-chip i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #1d9d5a;
+  box-shadow: 0 0 0 4px rgba(29, 157, 90, 0.15);
+}
+
+.status-chip.neutral {
+  border-color: #d7deec;
+  background: #fff;
+  color: #4f5f7e;
+}
+
+.status-chip.neutral i {
+  display: none;
 }
 
 .superadmin-topbar button {
@@ -74,5 +198,13 @@
   .superadmin-sidebar {
     position: static;
     height: auto;
+  }
+
+  .superadmin-topbar {
+    flex-wrap: wrap;
+  }
+
+  .superadmin-topbar-left {
+    width: 100%;
   }
 }

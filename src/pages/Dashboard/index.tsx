@@ -1,4 +1,14 @@
 import { useMemo, useState } from "react"
+import {
+  Activity,
+  BriefcaseMedical,
+  Building2,
+  CreditCard,
+  Gauge,
+  ShieldCheck,
+  Sparkles,
+  UserRoundCheck,
+} from "lucide-react"
 import "./dashboard.css"
 
 type RangeKey = "7d" | "30d" | "90d"
@@ -78,6 +88,7 @@ function formatINR(value: number) {
 export function DashboardPage() {
   const [range, setRange] = useState<RangeKey>("30d")
   const [company, setCompany] = useState<CompanyKey>("all")
+  const [focus, setFocus] = useState<"throughput" | "risk" | "finance">("throughput")
   const [corporateQueue, setCorporateQueue] = useState(corporateSeed)
   const [doctorQueue, setDoctorQueue] = useState(doctorSeed)
 
@@ -113,6 +124,12 @@ export function DashboardPage() {
   const sparkLabs = sparklinePath(trend.map((x) => Math.round(x.labs * multiplier)))
   const sparkConsults = sparklinePath(trend.map((x) => Math.round(x.consults * multiplier)))
   const sparkOpd = sparklinePath(trend.map((x) => Math.round(x.opd * multiplier)))
+  const focusMessage =
+    focus === "throughput"
+      ? "Throughput focus enabled: routing more queues to high-performing providers."
+      : focus === "risk"
+        ? "Risk focus enabled: stricter alerts for SLA breach and provider failure retries."
+        : "Finance focus enabled: highlighting burn variance and credit lock exposure."
 
   return (
     <div className="dashboard-page">
@@ -122,6 +139,11 @@ export function DashboardPage() {
           <p>
             End-to-end control for self-registered corporates, credit economy, doctors, and employee service utilization.
           </p>
+          <div className="dash-head-tags">
+            <span><ShieldCheck size={14} /> Audited</span>
+            <span><Sparkles size={14} /> AI-assisted</span>
+            <span><Activity size={14} /> Realtime</span>
+          </div>
         </div>
         <div className="dash-filters">
           <div className="range-switch">
@@ -144,34 +166,66 @@ export function DashboardPage() {
             <option value="vertex">Vertex Logistics</option>
           </select>
         </div>
+        <div className="dash-visual-card">
+          <div className="dash-visual-badge"><Gauge size={14} /> Focus Controls</div>
+          <div className="dash-focus-row">
+            <button type="button" className={focus === "throughput" ? "active" : ""} onClick={() => setFocus("throughput")}>Throughput</button>
+            <button type="button" className={focus === "risk" ? "active" : ""} onClick={() => setFocus("risk")}>Risk</button>
+            <button type="button" className={focus === "finance" ? "active" : ""} onClick={() => setFocus("finance")}>Finance</button>
+          </div>
+          <p>{focusMessage}</p>
+        </div>
       </section>
 
       <section className="dash-kpi-grid">
         <article className="dash-kpi-card">
-          <p>Active Employees</p>
+          <div className="kpi-title"><UserRoundCheck size={14} /><p>Active Employees</p></div>
           <strong>{new Intl.NumberFormat("en-IN").format(totals.totalUsers)}</strong>
           <svg viewBox="0 0 100 100" preserveAspectRatio="none">
             <polyline points={sparkLabs} />
           </svg>
         </article>
         <article className="dash-kpi-card">
-          <p>Credits Sold</p>
+          <div className="kpi-title"><CreditCard size={14} /><p>Credits Sold</p></div>
           <strong>{formatINR(totals.creditsSold)}</strong>
           <svg viewBox="0 0 100 100" preserveAspectRatio="none">
             <polyline points={sparkConsults} />
           </svg>
         </article>
         <article className="dash-kpi-card">
-          <p>Platform Revenue</p>
+          <div className="kpi-title"><BriefcaseMedical size={14} /><p>Platform Revenue</p></div>
           <strong>{formatINR(totals.revenue)}</strong>
           <svg viewBox="0 0 100 100" preserveAspectRatio="none">
             <polyline points={sparkOpd} />
           </svg>
         </article>
         <article className="dash-kpi-card">
-          <p>Approval Backlog</p>
+          <div className="kpi-title"><Building2 size={14} /><p>Approval Backlog</p></div>
           <strong>{corporateQueue.length + doctorQueue.length}</strong>
           <small>{corporateQueue.length} corporate and {doctorQueue.length} doctor</small>
+        </article>
+      </section>
+
+      <section className="dash-kpi-grid dash-kpi-grid-mini">
+        <article className="dash-kpi-card mini">
+          <p>Active Employees</p>
+          <strong>{new Intl.NumberFormat("en-IN").format(Math.round(totals.totalUsers * 0.31))}</strong>
+          <small>High-engagement employees</small>
+        </article>
+        <article className="dash-kpi-card mini">
+          <p>Credits Locked</p>
+          <strong>{formatINR(Math.round(totals.creditsSold * 0.42))}</strong>
+          <small>Projected quarterly lock reserve</small>
+        </article>
+        <article className="dash-kpi-card mini">
+          <p>Resolution SLA</p>
+          <strong>96.8%</strong>
+          <small>Tickets closed within target window</small>
+        </article>
+        <article className="dash-kpi-card mini">
+          <p>Ops Health Score</p>
+          <strong>{focus === "risk" ? "88" : focus === "finance" ? "91" : "93"}/100</strong>
+          <small>Dynamic score based on current focus</small>
         </article>
       </section>
 

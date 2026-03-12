@@ -1,0 +1,227 @@
+.corporate-page {
+  gap: 1rem;
+}
+
+.corporate-selector-shell {
+  display: grid;
+}
+
+.corporate-command-card {
+  border: 1px solid rgba(152, 178, 218, 0.24);
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.22), transparent 26%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 250, 255, 0.94));
+  box-shadow: 0 18px 42px rgba(24, 44, 80, 0.08);
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.corporate-command-head,
+.selected-corporate-head,
+.corporate-panel-head,
+.corporate-bar-row > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.corporate-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 1.9rem;
+  padding: 0 0.72rem;
+  border-radius: 999px;
+  background: #edf4ff;
+  color: #295e9d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.corporate-command-head h2,
+.selected-corporate-head h3,
+.corporate-panel-head h3 {
+  margin: 0.6rem 0 0.28rem;
+  color: #0f2340;
+}
+
+.corporate-command-head p,
+.selected-corporate-head p,
+.corporate-panel-head span,
+.corporate-insight-card small,
+.corporate-bar-row span,
+.corporate-op-grid small {
+  margin: 0;
+  color: #647591;
+}
+
+.corporate-picker {
+  min-width: 260px;
+  display: grid;
+  gap: 0.45rem;
+  color: #51627f;
+  font-size: 0.85rem;
+}
+
+.corporate-picker select {
+  min-height: 3rem;
+  border-radius: 1rem;
+  border: 1px solid #d5e1f4;
+  background: #f9fbff;
+  padding: 0 0.95rem;
+  font: inherit;
+  color: #163154;
+}
+
+.selected-corporate-head {
+  border: 1px solid #dbe6f7;
+  border-radius: 1.15rem;
+  background: linear-gradient(135deg, #11306b, #1e4ba4 52%, #1ea389);
+  padding: 1rem 1.1rem;
+  color: #fff;
+}
+
+.selected-corporate-head h3,
+.selected-corporate-head p {
+  color: #fff;
+}
+
+.corporate-insight-grid,
+.corporate-detail-grid,
+.corporate-mini-kpis,
+.corporate-op-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.corporate-insight-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.corporate-insight-card,
+.corporate-panel-card,
+.corporate-mini-kpis article,
+.corporate-op-grid article {
+  border: 1px solid #dce7f6;
+  border-radius: 1.15rem;
+  background: #fff;
+}
+
+.corporate-insight-card {
+  padding: 1rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.corporate-insight-card span,
+.corporate-op-grid article {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #3e648f;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.corporate-insight-card strong {
+  font-size: 1.45rem;
+  line-height: 1;
+  color: #0f2340;
+}
+
+.corporate-detail-grid {
+  grid-template-columns: 1.15fr 0.85fr;
+}
+
+.corporate-panel-card {
+  padding: 1rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.corporate-panel-head h3 {
+  margin: 0;
+}
+
+.corporate-mini-kpis {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.corporate-mini-kpis article {
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.corporate-mini-kpis small {
+  color: #6b7f9c;
+}
+
+.corporate-mini-kpis strong,
+.corporate-op-grid strong {
+  color: #10243f;
+  font-size: 1rem;
+}
+
+.corporate-bars {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.corporate-bar-row b {
+  color: #1f5fa1;
+  font-size: 0.8rem;
+}
+
+.corporate-bar-row i {
+  display: block;
+  height: 0.62rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1e64c8, #1db19a);
+}
+
+.corporate-op-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.corporate-op-grid article {
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #fff, #f8fbff);
+  padding: 0.95rem;
+}
+
+.corporate-op-grid article div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.corporate-employee-table {
+  overflow: auto;
+  border: 1px solid #e3ebf8;
+  border-radius: 1rem;
+}
+
+@media (max-width: 1180px) {
+  .corporate-insight-grid,
+  .corporate-detail-grid,
+  .corporate-mini-kpis,
+  .corporate-op-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .corporate-command-head,
+  .selected-corporate-head,
+  .corporate-panel-head {
+    flex-direction: column;
+  }
+
+  .corporate-picker {
+    min-width: 0;
+    width: 100%;
+  }
+}

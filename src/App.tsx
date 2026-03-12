@@ -6,12 +6,21 @@ import { AIGovernancePage } from "./pages/AIGovernance"
 import { BillingSettlementPage } from "./pages/BillingSettlement"
 import { CatalogGovernancePage } from "./pages/CatalogGovernance"
 import { CompliancePage } from "./pages/Compliance"
+import { CorporateAccountsPage } from "./pages/CorporateAccounts"
 import { DashboardPage } from "./pages/Dashboard"
 import { DataQualityPage } from "./pages/DataQuality"
+import { DoctorAnalyticsPage } from "./pages/DoctorAnalytics"
+import { DoctorManagementPage } from "./pages/DoctorManagement"
+import { DoctorProductsPage } from "./pages/DoctorProducts"
 import { IntegrationsPage } from "./pages/Integrations"
 import { LoginPage } from "./pages/Login"
 import { ObservabilityPage } from "./pages/Observability"
+import { OPDAnalyticsPage } from "./pages/OPDAnalytics"
+import { PharmacyOperationsPage } from "./pages/PharmacyOperations"
+import { PlatformLogsPage } from "./pages/PlatformLogs"
+import { ProgramsManagementPage } from "./pages/ProgramsManagement"
 import { SupportOverridesPage } from "./pages/SupportOverrides"
+import { TeleconsultAnalyticsPage } from "./pages/TeleconsultAnalytics"
 import { TenantManagementPage } from "./pages/TenantManagement"
 
 type UserSession = {
@@ -64,6 +73,15 @@ function App() {
           >
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route path="corporate-accounts" element={<CorporateAccountsPage />} />
+            <Route path="doctor-management" element={<DoctorManagementPage />} />
+            <Route path="doctor-products" element={<DoctorProductsPage />} />
+            <Route path="pharmacy-operations" element={<PharmacyOperationsPage />} />
+            <Route path="platform-logs" element={<PlatformLogsPage />} />
+            <Route path="teleconsult-analytics" element={<TeleconsultAnalyticsPage />} />
+            <Route path="doctor-analytics" element={<DoctorAnalyticsPage />} />
+            <Route path="opd-analytics" element={<OPDAnalyticsPage />} />
+            <Route path="programs-management" element={<ProgramsManagementPage />} />
             <Route path="tenant-management" element={<TenantManagementPage />} />
             <Route path="access-control" element={<AccessControlPage />} />
             <Route path="integrations" element={<IntegrationsPage />} />
