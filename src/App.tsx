@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import { AppLayout } from "./app/AppLayout"
 import { AccessControlPage } from "./pages/AccessControl"
@@ -22,6 +22,7 @@ import { ProgramsManagementPage } from "./pages/ProgramsManagement"
 import { SupportOverridesPage } from "./pages/SupportOverrides"
 import { TeleconsultAnalyticsPage } from "./pages/TeleconsultAnalytics"
 import { TenantManagementPage } from "./pages/TenantManagement"
+import { loginSuperAdmin } from "./services/authApi"
 
 type UserSession = {
   name: string
@@ -31,8 +32,20 @@ type UserSession = {
 function App() {
   const [session, setSession] = useState<UserSession | null>(null)
   const [authError, setAuthError] = useState("")
+  const SESSION_KEY = "astikan_superadmin_session"
 
   const appTitle = useMemo(() => "Astikan Super Admin", [])
+
+  useEffect(() => {
+    const raw = sessionStorage.getItem(SESSION_KEY)
+    if (!raw) return
+    try {
+      const parsed = JSON.parse(raw) as UserSession
+      if (parsed?.email) setSession(parsed)
+    } catch {
+      // ignore
+    }
+  }, [])
 
   return (
     <BrowserRouter>
@@ -44,16 +57,23 @@ function App() {
               <LoginPage
                 title={appTitle}
                 error={authError}
-                onLogin={(email, password) => {
-                  if (!email.trim() || !password.trim()) {
-                    setAuthError("Enter email and password.")
+                onLogin={async (username, password) => {
+                  if (!username.trim() || !password.trim()) {
+                    setAuthError("Enter username and password.")
                     return
                   }
                   setAuthError("")
-                  setSession({
-                    name: "Platform Admin",
-                    email,
-                  })
+                  try {
+                    const payload = await loginSuperAdmin(username.trim(), password)
+                    const nextSession = {
+                      name: payload.fullName ?? "Platform Admin",
+                      email: payload.email ?? username,
+                    }
+                    sessionStorage.setItem(SESSION_KEY, JSON.stringify(nextSession))
+                    setSession(nextSession)
+                  } catch (error) {
+                    setAuthError(error instanceof Error ? error.message : "Unable to sign in.")
+                  }
                 }}
               />
             }
@@ -67,7 +87,10 @@ function App() {
               <AppLayout
                 title={appTitle}
                 userEmail={session.email}
-                onLogout={() => setSession(null)}
+                onLogout={() => {
+                  sessionStorage.removeItem(SESSION_KEY)
+                  setSession(null)
+                }}
               />
             }
           >

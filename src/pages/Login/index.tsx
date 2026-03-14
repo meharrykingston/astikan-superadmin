@@ -4,11 +4,11 @@ import "./login.css"
 type LoginPageProps = {
   title: string
   error: string
-  onLogin: (email: string, password: string) => void
+  onLogin: (username: string, password: string) => void
 }
 
 export function LoginPage({ title, error, onLogin }: LoginPageProps) {
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
   return (
@@ -21,13 +21,13 @@ export function LoginPage({ title, error, onLogin }: LoginPageProps) {
         </p>
 
         <label>
-          Email
+          Username
           <input
             className="admin-input"
-            type="email"
-            placeholder="admin@company.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="superadmin"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </label>
 
@@ -45,7 +45,7 @@ export function LoginPage({ title, error, onLogin }: LoginPageProps) {
         <button
           type="button"
           className="admin-login-btn"
-          onClick={() => onLogin(email, password)}
+          onClick={() => onLogin(username, password)}
         >
           Sign In
         </button>
