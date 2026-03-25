@@ -1,79 +1,35 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Plus } from "lucide-react"
 import "../operations.css"
-
-type DoctorRecord = {
-  id: string
-  name: string
-  username: string
-  password: string
-  email: string
-  phone: string
-  specialty: string
-  status: "Active" | "Pending" | "KYC" | "Inactive"
-  image: string
-}
+import { fetchDoctorsAdmin, updateDoctorAdmin, type DoctorAdminRecord } from "../../services/doctorsAdminApi"
 
 export function DoctorManagementPage() {
   const [showActions, setShowActions] = useState(false)
-  const [editingDoctor, setEditingDoctor] = useState<DoctorRecord | null>(null)
-  const [doctors, setDoctors] = useState<DoctorRecord[]>([
-    {
-      id: "DOC-001",
-      name: "Dr. Sarah Kumar",
-      username: "sarah.kumar",
-      password: "Doctor@123",
-      email: "sarah.kumar@astikan.com",
-      phone: "9876543210",
-      specialty: "General Physician",
-      status: "Active",
-      image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=160&q=80",
-    },
-    {
-      id: "DOC-002",
-      name: "Dr. Pawan Kr. Gupta",
-      username: "pawan.gupta",
-      password: "Doctor@123",
-      email: "pawan.gupta@astikan.com",
-      phone: "9876501122",
-      specialty: "Internal Medicine",
-      status: "Active",
-      image: "https://images.unsplash.com/photo-1614436163996-25cee5f54290?auto=format&fit=crop&w=160&q=80",
-    },
-    {
-      id: "DOC-003",
-      name: "Dr. Madhur Rastogi",
-      username: "madhur.rastogi",
-      password: "Doctor@123",
-      email: "madhur.rastogi@astikan.com",
-      phone: "9811022334",
-      specialty: "Internal Medicine",
-      status: "Pending",
-      image: "https://images.unsplash.com/photo-1594824475317-6f6d4f3a04c9?auto=format&fit=crop&w=160&q=80",
-    },
-    {
-      id: "DOC-004",
-      name: "Dr. Gulab Gupta",
-      username: "gulab.gupta",
-      password: "Doctor@123",
-      email: "gulab.gupta@astikan.com",
-      phone: "9811123456",
-      specialty: "Internal Medicine",
-      status: "KYC",
-      image: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=160&q=80",
-    },
-    {
-      id: "DOC-005",
-      name: "Dr. S.K. Plaha",
-      username: "sk.plaha",
-      password: "Doctor@123",
-      email: "sk.plaha@astikan.com",
-      phone: "9811098765",
-      specialty: "Internal Medicine",
-      status: "Inactive",
-      image: "https://images.unsplash.com/photo-1551836022-4c4c79ecde51?auto=format&fit=crop&w=160&q=80",
-    },
-  ])
+  const [editingDoctor, setEditingDoctor] = useState<DoctorAdminRecord | null>(null)
+  const [doctors, setDoctors] = useState<DoctorAdminRecord[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
+
+  useEffect(() => {
+    let active = true
+    setLoading(true)
+    void fetchDoctorsAdmin()
+      .then((rows) => {
+        if (!active) return
+        setDoctors(rows)
+        setError("")
+      })
+      .catch((err) => {
+        if (!active) return
+        setError(err instanceof Error ? err.message : "Unable to load doctors")
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [])
 
   const statusCounts = useMemo(() => {
     const total = doctors.length
@@ -129,6 +85,8 @@ export function DoctorManagementPage() {
       </section>
 
       <section className="ops-table-wrap">
+        {loading && <div className="ops-kpi-sub">Loading doctors...</div>}
+        {error && <div className="ops-kpi-sub">{error}</div>}
         <table className="ops-table">
           <thead>
             <tr>
@@ -147,7 +105,7 @@ export function DoctorManagementPage() {
             {doctors.map((doctor) => (
               <tr key={doctor.id}>
                 <td>
-                  <img className="ops-table-avatar" src={doctor.image} alt={doctor.name} />
+                  <img className="ops-table-avatar" src={doctor.image ?? "https://ui-avatars.com/api/?name=Doctor"} alt={doctor.name} />
                 </td>
                 <td>{doctor.name}</td>
                 <td>{doctor.username}</td>
@@ -260,7 +218,7 @@ export function DoctorManagementPage() {
                 Status
                 <select
                   value={editingDoctor.status}
-                  onChange={(event) => setEditingDoctor({ ...editingDoctor, status: event.target.value as DoctorRecord["status"] })}
+                  onChange={(event) => setEditingDoctor({ ...editingDoctor, status: event.target.value })}
                 >
                   <option value="Active">Active</option>
                   <option value="Pending">Pending</option>
@@ -281,10 +239,14 @@ export function DoctorManagementPage() {
                 type="button"
                 className="primary"
                 onClick={() => {
-                  setDoctors((prev) =>
-                    prev.map((doc) => (doc.id === editingDoctor.id ? editingDoctor : doc))
-                  )
-                  setEditingDoctor(null)
+                  void updateDoctorAdmin(editingDoctor.id, editingDoctor)
+                    .then(() => {
+                      setDoctors((prev) =>
+                        prev.map((doc) => (doc.id === editingDoctor.id ? editingDoctor : doc))
+                      )
+                      setEditingDoctor(null)
+                    })
+                    .catch((err) => setError(err instanceof Error ? err.message : "Unable to save changes"))
                 }}
               >
                 Save Changes
