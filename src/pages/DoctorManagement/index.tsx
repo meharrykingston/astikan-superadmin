@@ -10,6 +10,28 @@ export function DoctorManagementPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
 
+  const buildAvatar = (name: string) => {
+    const initials = name
+      .split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("") || "DR"
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#e7ecf7"/>
+            <stop offset="100%" stop-color="#cfd7ea"/>
+          </linearGradient>
+        </defs>
+        <rect width="64" height="64" rx="32" fill="url(#g)"/>
+        <text x="50%" y="54%" text-anchor="middle" font-family="Satoshi, Arial" font-size="22" fill="#374151" font-weight="700">${initials}</text>
+      </svg>
+    `.trim()
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`
+  }
+
   useEffect(() => {
     let active = true
     setLoading(true)
@@ -107,10 +129,10 @@ export function DoctorManagementPage() {
                 <td>
                   <img
                     className="ops-table-avatar"
-                    src={doctor.image ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(doctor.name)}`}
+                    src={doctor.image ?? buildAvatar(doctor.name)}
                     alt={doctor.name}
                     onError={(event) => {
-                      event.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doctor.name)}`
+                      event.currentTarget.src = buildAvatar(doctor.name)
                     }}
                   />
                 </td>
