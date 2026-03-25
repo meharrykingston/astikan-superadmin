@@ -15,14 +15,55 @@
   gap: 12px;
 }
 
-.ops-primary-btn {
-  min-height: 40px;
-  border-radius: 10px;
+.ops-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   border: 0;
-  padding: 0 18px;
+  display: grid;
+  place-items: center;
   background: var(--brand);
   color: #fff;
-  font-weight: 700;
+  cursor: pointer;
+}
+
+.ops-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 18, 36, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  z-index: 30;
+}
+
+.ops-modal-card {
+  width: min(900px, 92vw);
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #e3e9f6;
+  padding: 18px;
+  display: grid;
+  gap: 14px;
+}
+
+.ops-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ops-modal-head h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.ops-modal-close {
+  border: 1px solid #d7dff1;
+  background: #fff;
+  border-radius: 10px;
+  padding: 6px 12px;
   cursor: pointer;
 }
 

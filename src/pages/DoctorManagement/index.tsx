@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Plus } from "lucide-react"
 import "../operations.css"
 
 export function DoctorManagementPage() {
@@ -12,10 +13,11 @@ export function DoctorManagementPage() {
         </div>
         <button
           type="button"
-          className="ops-primary-btn"
+          className="ops-icon-btn"
           onClick={() => setShowActions((prev) => !prev)}
+          aria-label="Add doctor actions"
         >
-          {showActions ? "Hide" : "Add"}
+          <Plus size={18} />
         </button>
       </header>
 
@@ -48,26 +50,36 @@ export function DoctorManagementPage() {
       </section>
 
       {showActions && (
-        <section className="ops-grid ops-grid--2">
-          <article className="ops-card">
-            <h2>Add Doctor</h2>
-            <p className="ops-kpi-sub">Create a new doctor profile manually.</p>
-            <div className="ops-actions">
-              <button type="button" className="primary">Add Doctor</button>
+        <div className="ops-modal">
+          <div className="ops-modal-card">
+            <div className="ops-modal-head">
+              <h2>Add Doctors</h2>
+              <button type="button" className="ops-modal-close" onClick={() => setShowActions(false)}>
+                Close
+              </button>
             </div>
-          </article>
-          <article className="ops-card">
-            <h2>Upload Doctors</h2>
-            <p className="ops-kpi-sub">Bulk import doctors via Excel/CSV.</p>
-            <label>
-              Select file
-              <input type="file" accept=".xlsx,.xls,.csv,text/csv" />
-            </label>
-            <div className="ops-actions">
-              <button type="button" className="primary">Upload</button>
+            <div className="ops-grid ops-grid--2">
+              <article className="ops-card">
+                <h2>Add Doctor</h2>
+                <p className="ops-kpi-sub">Create a new doctor profile manually.</p>
+                <div className="ops-actions">
+                  <button type="button" className="primary">Add Doctor</button>
+                </div>
+              </article>
+              <article className="ops-card">
+                <h2>Upload Doctors</h2>
+                <p className="ops-kpi-sub">Bulk import doctors via Excel/CSV.</p>
+                <label>
+                  Select file
+                  <input type="file" accept=".xlsx,.xls,.csv,text/csv" />
+                </label>
+                <div className="ops-actions">
+                  <button type="button" className="primary">Upload</button>
+                </div>
+              </article>
             </div>
-          </article>
-        </section>
+          </div>
+        </div>
       )}
     </main>
   )
