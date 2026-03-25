@@ -502,6 +502,15 @@
   font-size: 0.9rem;
 }
 
+.ops-table-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid #e2e8f5;
+  display: block;
+}
+
 .ops-table th {
   font-size: 0.82rem;
   color: #506086;

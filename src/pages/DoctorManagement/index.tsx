@@ -1,9 +1,88 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Plus } from "lucide-react"
 import "../operations.css"
 
+type DoctorRecord = {
+  id: string
+  name: string
+  username: string
+  password: string
+  email: string
+  phone: string
+  specialty: string
+  status: "Active" | "Pending" | "KYC" | "Inactive"
+  image: string
+}
+
 export function DoctorManagementPage() {
   const [showActions, setShowActions] = useState(false)
+  const [editingDoctor, setEditingDoctor] = useState<DoctorRecord | null>(null)
+  const [doctors, setDoctors] = useState<DoctorRecord[]>([
+    {
+      id: "DOC-001",
+      name: "Dr. Sarah Kumar",
+      username: "sarah.kumar",
+      password: "Doctor@123",
+      email: "sarah.kumar@astikan.com",
+      phone: "9876543210",
+      specialty: "General Physician",
+      status: "Active",
+      image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=160&q=80",
+    },
+    {
+      id: "DOC-002",
+      name: "Dr. Pawan Kr. Gupta",
+      username: "pawan.gupta",
+      password: "Doctor@123",
+      email: "pawan.gupta@astikan.com",
+      phone: "9876501122",
+      specialty: "Internal Medicine",
+      status: "Active",
+      image: "https://images.unsplash.com/photo-1614436163996-25cee5f54290?auto=format&fit=crop&w=160&q=80",
+    },
+    {
+      id: "DOC-003",
+      name: "Dr. Madhur Rastogi",
+      username: "madhur.rastogi",
+      password: "Doctor@123",
+      email: "madhur.rastogi@astikan.com",
+      phone: "9811022334",
+      specialty: "Internal Medicine",
+      status: "Pending",
+      image: "https://images.unsplash.com/photo-1594824475317-6f6d4f3a04c9?auto=format&fit=crop&w=160&q=80",
+    },
+    {
+      id: "DOC-004",
+      name: "Dr. Gulab Gupta",
+      username: "gulab.gupta",
+      password: "Doctor@123",
+      email: "gulab.gupta@astikan.com",
+      phone: "9811123456",
+      specialty: "Internal Medicine",
+      status: "KYC",
+      image: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=160&q=80",
+    },
+    {
+      id: "DOC-005",
+      name: "Dr. S.K. Plaha",
+      username: "sk.plaha",
+      password: "Doctor@123",
+      email: "sk.plaha@astikan.com",
+      phone: "9811098765",
+      specialty: "Internal Medicine",
+      status: "Inactive",
+      image: "https://images.unsplash.com/photo-1551836022-4c4c79ecde51?auto=format&fit=crop&w=160&q=80",
+    },
+  ])
+
+  const statusCounts = useMemo(() => {
+    const total = doctors.length
+    const active = doctors.filter((doc) => doc.status === "Active").length
+    const pending = doctors.filter((doc) => doc.status === "Pending").length
+    const kyc = doctors.filter((doc) => doc.status === "KYC").length
+    const inactive = doctors.filter((doc) => doc.status === "Inactive").length
+    return { total, active, pending, kyc, inactive }
+  }, [doctors])
 
   return (
     <main className="ops-page">
@@ -24,29 +103,72 @@ export function DoctorManagementPage() {
       <section className="ops-grid ops-grid--5">
         <article className="ops-card">
           <h2>All Doctors</h2>
-          <div className="ops-kpi">695</div>
+          <div className="ops-kpi">{statusCounts.total}</div>
           <div className="ops-kpi-sub">Total onboarded</div>
         </article>
         <article className="ops-card">
           <h2>Active Doctors</h2>
-          <div className="ops-kpi">652</div>
+          <div className="ops-kpi">{statusCounts.active}</div>
           <div className="ops-kpi-sub">Available for consults</div>
         </article>
         <article className="ops-card">
           <h2>Pending Approvals</h2>
-          <div className="ops-kpi">18</div>
+          <div className="ops-kpi">{statusCounts.pending}</div>
           <div className="ops-kpi-sub">Awaiting verification</div>
         </article>
         <article className="ops-card">
           <h2>Pending KYC</h2>
-          <div className="ops-kpi">21</div>
+          <div className="ops-kpi">{statusCounts.kyc}</div>
           <div className="ops-kpi-sub">Documents required</div>
         </article>
         <article className="ops-card">
           <h2>Inactive</h2>
-          <div className="ops-kpi">4</div>
+          <div className="ops-kpi">{statusCounts.inactive}</div>
           <div className="ops-kpi-sub">Temporarily disabled</div>
         </article>
+      </section>
+
+      <section className="ops-table-wrap">
+        <table className="ops-table">
+          <thead>
+            <tr>
+              <th>Profile</th>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Password</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Specialty</th>
+              <th>Status</th>
+              <th>Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {doctors.map((doctor) => (
+              <tr key={doctor.id}>
+                <td>
+                  <img className="ops-table-avatar" src={doctor.image} alt={doctor.name} />
+                </td>
+                <td>{doctor.name}</td>
+                <td>{doctor.username}</td>
+                <td>{doctor.password}</td>
+                <td>{doctor.email}</td>
+                <td>{doctor.phone}</td>
+                <td>{doctor.specialty}</td>
+                <td>
+                  <span className={`ops-chip ${doctor.status === "Active" ? "success" : doctor.status === "Inactive" ? "danger" : "warning"}`}>
+                    {doctor.status}
+                  </span>
+                </td>
+                <td>
+                  <button type="button" className="primary" onClick={() => setEditingDoctor(doctor)}>
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
 
       {showActions && (
@@ -77,6 +199,96 @@ export function DoctorManagementPage() {
                   <button type="button" className="primary">Upload</button>
                 </div>
               </article>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editingDoctor && (
+        <div className="ops-modal">
+          <div className="ops-modal-card">
+            <div className="ops-modal-head">
+              <h2>Edit Doctor</h2>
+              <button type="button" className="ops-modal-close" onClick={() => setEditingDoctor(null)}>
+                Close
+              </button>
+            </div>
+            <div className="ops-grid ops-grid--2">
+              <label>
+                Name
+                <input
+                  value={editingDoctor.name}
+                  onChange={(event) => setEditingDoctor({ ...editingDoctor, name: event.target.value })}
+                />
+              </label>
+              <label>
+                Username
+                <input
+                  value={editingDoctor.username}
+                  onChange={(event) => setEditingDoctor({ ...editingDoctor, username: event.target.value })}
+                />
+              </label>
+              <label>
+                Password
+                <input
+                  value={editingDoctor.password}
+                  onChange={(event) => setEditingDoctor({ ...editingDoctor, password: event.target.value })}
+                />
+              </label>
+              <label>
+                Email
+                <input
+                  value={editingDoctor.email}
+                  onChange={(event) => setEditingDoctor({ ...editingDoctor, email: event.target.value })}
+                />
+              </label>
+              <label>
+                Phone
+                <input
+                  value={editingDoctor.phone}
+                  onChange={(event) => setEditingDoctor({ ...editingDoctor, phone: event.target.value })}
+                />
+              </label>
+              <label>
+                Specialty
+                <input
+                  value={editingDoctor.specialty}
+                  onChange={(event) => setEditingDoctor({ ...editingDoctor, specialty: event.target.value })}
+                />
+              </label>
+              <label>
+                Status
+                <select
+                  value={editingDoctor.status}
+                  onChange={(event) => setEditingDoctor({ ...editingDoctor, status: event.target.value as DoctorRecord["status"] })}
+                >
+                  <option value="Active">Active</option>
+                  <option value="Pending">Pending</option>
+                  <option value="KYC">KYC</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </label>
+              <label>
+                Profile Image URL
+                <input
+                  value={editingDoctor.image}
+                  onChange={(event) => setEditingDoctor({ ...editingDoctor, image: event.target.value })}
+                />
+              </label>
+            </div>
+            <div className="ops-actions">
+              <button
+                type="button"
+                className="primary"
+                onClick={() => {
+                  setDoctors((prev) =>
+                    prev.map((doc) => (doc.id === editingDoctor.id ? editingDoctor : doc))
+                  )
+                  setEditingDoctor(null)
+                }}
+              >
+                Save Changes
+              </button>
             </div>
           </div>
         </div>
