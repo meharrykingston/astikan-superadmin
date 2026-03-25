@@ -105,7 +105,14 @@ export function DoctorManagementPage() {
             {doctors.map((doctor) => (
               <tr key={doctor.id}>
                 <td>
-                  <img className="ops-table-avatar" src={doctor.image ?? "https://ui-avatars.com/api/?name=Doctor"} alt={doctor.name} />
+                  <img
+                    className="ops-table-avatar"
+                    src={doctor.image ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(doctor.name)}`}
+                    alt={doctor.name}
+                    onError={(event) => {
+                      event.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doctor.name)}`
+                    }}
+                  />
                 </td>
                 <td>{doctor.name}</td>
                 <td>{doctor.username}</td>
