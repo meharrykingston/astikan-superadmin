@@ -80,17 +80,6 @@ export function AppLayout({ title, userEmail }: AppLayoutProps) {
             onChange={(event) => setNavQuery(event.target.value)}
           />
         </div>
-        <section className="superadmin-illustration-card">
-          <div className="superadmin-orbit">
-            <i />
-            <i />
-            <i />
-          </div>
-          <div>
-            <strong>Command Room Live</strong>
-            <small>24 data streams monitored in real time</small>
-          </div>
-        </section>
         <nav>
           {filteredNav.map((item) => (
             <NavLink
