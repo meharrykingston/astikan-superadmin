@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import {
   Activity,
   Bot,
@@ -27,7 +27,6 @@ import "./app-layout.css"
 type AppLayoutProps = {
   title: string
   userEmail: string
-  onLogout: () => void
 }
 
 type NavItem = {
@@ -59,16 +58,8 @@ const navItems: NavItem[] = [
   { to: "/support-overrides", label: "Support", icon: HandHeart },
 ]
 
-export function AppLayout({ title, userEmail, onLogout }: AppLayoutProps) {
+export function AppLayout({ title, userEmail }: AppLayoutProps) {
   const [navQuery, setNavQuery] = useState("")
-  const currentDateTime = useMemo(
-    () =>
-      new Date().toLocaleString("en-IN", {
-        dateStyle: "medium",
-        timeStyle: "short",
-      }),
-    []
-  )
 
   const filteredNav = useMemo(() => {
     const query = navQuery.trim().toLowerCase()
@@ -117,15 +108,6 @@ export function AppLayout({ title, userEmail, onLogout }: AppLayoutProps) {
       </aside>
 
       <main className="superadmin-content">
-        <div className="superadmin-topbar">
-          <div className="superadmin-topbar-left">
-            <span className="status-chip"><i />Live monitoring</span>
-            <span className="status-chip neutral">{currentDateTime}</span>
-          </div>
-          <button type="button" onClick={onLogout}>
-            Logout
-          </button>
-        </div>
         <Outlet />
       </main>
     </div>

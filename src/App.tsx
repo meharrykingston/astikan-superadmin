@@ -97,10 +97,6 @@ function App() {
               <AppLayout
                 title={appTitle}
                 userEmail={session.email}
-                onLogout={() => {
-                  sessionStorage.removeItem(SESSION_KEY)
-                  setSession(null)
-                }}
               />
             }
           >
