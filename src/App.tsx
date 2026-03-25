@@ -41,6 +41,12 @@ function App() {
     if (!raw) return
     try {
       const parsed = JSON.parse(raw) as UserSession
+      if (parsed?.email === "superadmin@astikan.local") {
+        const updated = { ...parsed, email: "astikanworld@gmail.com" }
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(updated))
+        setSession(updated)
+        return
+      }
       if (parsed?.email) setSession(parsed)
     } catch {
       // ignore
@@ -65,9 +71,13 @@ function App() {
                   setAuthError("")
                   try {
                     const payload = await loginSuperAdmin(username.trim(), password)
+                    const email =
+                      payload.email === "superadmin@astikan.local"
+                        ? "astikanworld@gmail.com"
+                        : payload.email ?? username
                     const nextSession = {
                       name: payload.fullName ?? "Platform Admin",
-                      email: payload.email ?? username,
+                      email,
                     }
                     sessionStorage.setItem(SESSION_KEY, JSON.stringify(nextSession))
                     setSession(nextSession)

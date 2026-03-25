@@ -39,7 +39,7 @@ type NavItem = {
 const navItems: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/corporate-accounts", label: "Corporate Accounts", icon: Building2 },
-  { to: "/doctor-management", label: "Doctor Management", icon: UserCheck },
+  { to: "/doctor-management", label: "Doctors", icon: UserCheck },
   { to: "/doctor-products", label: "Doctor Products", icon: PackagePlus },
   { to: "/pharmacy-operations", label: "Pharmacy Ops", icon: Syringe },
   { to: "/platform-logs", label: "Platform Logs", icon: Activity },
