@@ -44,6 +44,10 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.ops-grid--5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
 .ops-card {
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -501,6 +505,7 @@
   .ops-grid--2,
   .ops-grid--3,
   .ops-grid--4,
+  .ops-grid--5,
   .ops-money-grid,
   .ops-summary-item,
   .ops-leader-row {
