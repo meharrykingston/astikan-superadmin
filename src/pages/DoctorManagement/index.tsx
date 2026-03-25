@@ -1,10 +1,22 @@
+import { useState } from "react"
 import "../operations.css"
 
 export function DoctorManagementPage() {
+  const [showActions, setShowActions] = useState(false)
+
   return (
     <main className="ops-page">
-      <header className="ops-head">
-        <h1>Doctors</h1>
+      <header className="ops-head ops-head-row">
+        <div>
+          <h1>Doctors</h1>
+        </div>
+        <button
+          type="button"
+          className="ops-primary-btn"
+          onClick={() => setShowActions((prev) => !prev)}
+        >
+          {showActions ? "Hide" : "Add"}
+        </button>
       </header>
 
       <section className="ops-grid ops-grid--5">
@@ -34,6 +46,29 @@ export function DoctorManagementPage() {
           <div className="ops-kpi-sub">Temporarily disabled</div>
         </article>
       </section>
+
+      {showActions && (
+        <section className="ops-grid ops-grid--2">
+          <article className="ops-card">
+            <h2>Add Doctor</h2>
+            <p className="ops-kpi-sub">Create a new doctor profile manually.</p>
+            <div className="ops-actions">
+              <button type="button" className="primary">Add Doctor</button>
+            </div>
+          </article>
+          <article className="ops-card">
+            <h2>Upload Doctors</h2>
+            <p className="ops-kpi-sub">Bulk import doctors via Excel/CSV.</p>
+            <label>
+              Select file
+              <input type="file" accept=".xlsx,.xls,.csv,text/csv" />
+            </label>
+            <div className="ops-actions">
+              <button type="button" className="primary">Upload</button>
+            </div>
+          </article>
+        </section>
+      )}
     </main>
   )
 }

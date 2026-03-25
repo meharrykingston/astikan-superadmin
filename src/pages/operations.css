@@ -8,6 +8,24 @@
   font-size: 1.55rem;
 }
 
+.ops-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ops-primary-btn {
+  min-height: 40px;
+  border-radius: 10px;
+  border: 0;
+  padding: 0 18px;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .ops-head p {
   margin: 6px 0 0;
   color: var(--muted);
