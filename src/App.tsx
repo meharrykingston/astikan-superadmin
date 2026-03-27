@@ -12,6 +12,7 @@ import { DataQualityPage } from "./pages/DataQuality"
 import { DoctorAnalyticsPage } from "./pages/DoctorAnalytics"
 import { DoctorManagementPage } from "./pages/DoctorManagement"
 import { DoctorProductsPage } from "./pages/DoctorProducts"
+import { CostCalculatorPage } from "./pages/CostCalculator"
 import { IntegrationsPage } from "./pages/Integrations"
 import { LoginPage } from "./pages/Login"
 import { ObservabilityPage } from "./pages/Observability"
@@ -19,8 +20,10 @@ import { OPDAnalyticsPage } from "./pages/OPDAnalytics"
 import { PharmacyOperationsPage } from "./pages/PharmacyOperations"
 import { PlatformLogsPage } from "./pages/PlatformLogs"
 import { ProgramsManagementPage } from "./pages/ProgramsManagement"
+import { PayrollPage } from "./pages/Payroll"
 import { SupportOverridesPage } from "./pages/SupportOverrides"
 import { TeleconsultAnalyticsPage } from "./pages/TeleconsultAnalytics"
+import { ConsultationsPage } from "./pages/Consultations"
 import { TenantManagementPage } from "./pages/TenantManagement"
 import { loginSuperAdmin } from "./services/authApi"
 
@@ -34,7 +37,7 @@ function App() {
   const [authError, setAuthError] = useState("")
   const SESSION_KEY = "astikan_superadmin_session"
 
-  const appTitle = useMemo(() => "Astikan Super Admin", [])
+  const appTitle = useMemo(() => "Astikan Healthcares", [])
 
   useEffect(() => {
     const raw = sessionStorage.getItem(SESSION_KEY)
@@ -102,11 +105,27 @@ function App() {
           >
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="corporate-accounts" element={<CorporateAccountsPage />} />
-            <Route path="doctor-management" element={<DoctorManagementPage />} />
-            <Route path="doctor-products" element={<DoctorProductsPage />} />
-            <Route path="pharmacy-operations" element={<PharmacyOperationsPage />} />
+            <Route path="corporate-accounts" element={<CorporateAccountsPage initialFilter="all" />} />
+            <Route path="corporate-accounts/pending" element={<CorporateAccountsPage initialFilter="pending" />} />
+            <Route path="corporate-accounts/active" element={<CorporateAccountsPage initialFilter="active" />} />
+            <Route path="doctor-management" element={<Navigate to="/doctors" replace />} />
+            <Route path="doctors" element={<DoctorManagementPage />} />
+            <Route path="doctors/pending" element={<DoctorManagementPage initialFilter="Pending" />} />
+            <Route path="doctors/kyc" element={<DoctorManagementPage initialFilter="Pending KYC" />} />
+            <Route path="doctors/inactive" element={<DoctorManagementPage initialFilter="Inactive" />} />
+            <Route path="doctors/active" element={<DoctorManagementPage initialFilter="Active" />} />
+            <Route path="products" element={<DoctorProductsPage />} />
+            <Route path="medicine" element={<PharmacyOperationsPage />} />
+            <Route path="cost-calculator" element={<CostCalculatorPage />} />
             <Route path="platform-logs" element={<PlatformLogsPage />} />
+            <Route path="consultations/tele" element={<ConsultationsPage title="Teleconsultation" subtitle="All consultations" />} />
+            <Route path="consultations/tele/upcoming" element={<ConsultationsPage title="Teleconsultation" subtitle="Upcoming consultations" />} />
+            <Route path="consultations/tele/ongoing" element={<ConsultationsPage title="Teleconsultation" subtitle="Ongoing consultations" />} />
+            <Route path="consultations/tele/rescheduled" element={<ConsultationsPage title="Teleconsultation" subtitle="Rescheduled consultations" />} />
+            <Route path="consultations/opd" element={<ConsultationsPage title="OPD Consultation" subtitle="All OPD consultations" />} />
+            <Route path="consultations/opd/upcoming" element={<ConsultationsPage title="OPD Consultation" subtitle="Upcoming OPD consultations" />} />
+            <Route path="consultations/opd/ongoing" element={<ConsultationsPage title="OPD Consultation" subtitle="Ongoing OPD consultations" />} />
+            <Route path="consultations/opd/rescheduled" element={<ConsultationsPage title="OPD Consultation" subtitle="Rescheduled OPD consultations" />} />
             <Route path="teleconsult-analytics" element={<TeleconsultAnalyticsPage />} />
             <Route path="doctor-analytics" element={<DoctorAnalyticsPage />} />
             <Route path="opd-analytics" element={<OPDAnalyticsPage />} />
@@ -114,6 +133,8 @@ function App() {
             <Route path="tenant-management" element={<TenantManagementPage />} />
             <Route path="access-control" element={<AccessControlPage />} />
             <Route path="integrations" element={<IntegrationsPage />} />
+            <Route path="payroll" element={<PayrollPage />} />
+            <Route path="payroll/setup" element={<PayrollPage subtitle="Setup payroll" />} />
             <Route path="catalog-governance" element={<CatalogGovernancePage />} />
             <Route path="data-quality" element={<DataQualityPage />} />
             <Route path="billing-settlement" element={<BillingSettlementPage />} />

@@ -16,7 +16,7 @@ export function PharmacyOperationsPage() {
   return (
     <main className="ops-page">
       <header className="ops-head">
-        <h1>Pharmacy Medicines and Orders</h1>
+        <h1>Medicine Catalog & Orders</h1>
         <p>Add medicines, manage stock, and process pharmacy orders in one place.</p>
       </header>
 

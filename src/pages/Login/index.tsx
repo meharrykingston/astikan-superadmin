@@ -14,11 +14,7 @@ export function LoginPage({ title, error, onLogin }: LoginPageProps) {
   return (
     <main className="admin-login-page">
       <section className="admin-login-card">
-        <p className="admin-login-kicker">Platform Access</p>
         <h1>{title}</h1>
-        <p className="admin-login-sub">
-          Manage tenants, providers, billing, and operations from one control plane.
-        </p>
 
         <label>
           Username

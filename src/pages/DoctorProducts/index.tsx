@@ -10,8 +10,8 @@ export function DoctorProductsPage() {
   return (
     <main className="ops-page">
       <header className="ops-head">
-        <h1>Doctor Product Listing</h1>
-        <p>Admin catalog for products available to doctors across specialties and plans.</p>
+        <h1>Products Catalog</h1>
+        <p>Manage the corporate health products available across plans and specialties.</p>
       </header>
 
       <section className="ops-actions">

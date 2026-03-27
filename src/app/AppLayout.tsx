@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import {
   Activity,
   Bot,
@@ -13,7 +13,6 @@ import {
   LayoutDashboard,
   Microscope,
   PackagePlus,
-  Search,
   Shield,
   Stethoscope,
   Syringe,
@@ -33,66 +32,136 @@ type NavItem = {
   to: string
   label: string
   icon: LucideIcon
+  children?: NavItem[]
 }
 
 const navItems: NavItem[] = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/corporate-accounts", label: "Corporate Accounts", icon: Building2 },
-  { to: "/doctor-management", label: "Doctors", icon: UserCheck },
-  { to: "/doctor-products", label: "Doctor Products", icon: PackagePlus },
-  { to: "/pharmacy-operations", label: "Pharmacy Ops", icon: Syringe },
-  { to: "/platform-logs", label: "Platform Logs", icon: Activity },
-  { to: "/teleconsult-analytics", label: "Teleconsult Analytics", icon: Stethoscope },
-  { to: "/doctor-analytics", label: "Doctor Analytics", icon: Users },
-  { to: "/opd-analytics", label: "OPD Analytics", icon: Microscope },
+  {
+    to: "/corporate-accounts",
+    label: "Corporates",
+    icon: Building2,
+    children: [
+      { to: "/corporate-accounts", label: "All Corporates", icon: ClipboardCheck },
+      { to: "/corporate-accounts/pending", label: "Pending Approvals", icon: ClipboardCheck },
+      { to: "/corporate-accounts/active", label: "Active Corporates", icon: ClipboardCheck },
+    ],
+  },
+  {
+    to: "/doctors",
+    label: "Doctors",
+    icon: UserCheck,
+    children: [
+      { to: "/doctors", label: "All Doctors", icon: ClipboardCheck },
+      { to: "/doctors/pending", label: "Pending Approvals", icon: ClipboardCheck },
+      { to: "/doctors/kyc", label: "Pending KYC", icon: ClipboardCheck },
+      { to: "/doctors/inactive", label: "Inactive", icon: ClipboardCheck },
+      { to: "/doctors/active", label: "Active", icon: ClipboardCheck },
+    ],
+  },
+  {
+    to: "/consultations",
+    label: "Consultations",
+    icon: Stethoscope,
+    children: [
+      {
+        to: "/consultations/tele",
+        label: "Teleconsultation",
+        icon: Stethoscope,
+        children: [
+          { to: "/consultations/tele/upcoming", label: "Upcoming Consultations", icon: ClipboardCheck },
+          { to: "/consultations/tele/ongoing", label: "Ongoing Consultations", icon: ClipboardCheck },
+          { to: "/consultations/tele/rescheduled", label: "Rescheduled Consultations", icon: ClipboardCheck },
+        ],
+      },
+      {
+        to: "/consultations/opd",
+        label: "OPD Consultation",
+        icon: Microscope,
+        children: [
+          { to: "/consultations/opd/upcoming", label: "Upcoming OPD", icon: ClipboardCheck },
+          { to: "/consultations/opd/ongoing", label: "Ongoing OPD", icon: ClipboardCheck },
+          { to: "/consultations/opd/rescheduled", label: "Rescheduled OPD", icon: ClipboardCheck },
+        ],
+      },
+    ],
+  },
+  {
+    to: "/products",
+    label: "Products",
+    icon: PackagePlus,
+    children: [
+      { to: "/products", label: "All Products", icon: ClipboardCheck },
+      { to: "/products/categories", label: "All Categories", icon: ClipboardCheck },
+      { to: "/products/active", label: "Active Products", icon: ClipboardCheck },
+      { to: "/products/inactive", label: "Inactive Products", icon: ClipboardCheck },
+      { to: "/products/inventory", label: "Inventory", icon: ClipboardCheck },
+      { to: "/products/orders", label: "Orders", icon: ClipboardCheck },
+    ],
+  },
+  { to: "/medicine", label: "Medicine", icon: Syringe },
+  { to: "/cost-calculator", label: "Cost Calculator", icon: CreditCard },
   { to: "/programs-management", label: "Programs", icon: HandHeart },
-  { to: "/tenant-management", label: "Corporate Approvals", icon: ClipboardCheck },
   { to: "/billing-settlement", label: "Credits & Billing", icon: CreditCard },
-  { to: "/integrations", label: "Provider Integrations", icon: Cable },
   { to: "/catalog-governance", label: "Lab Catalog", icon: FlaskConical },
-  { to: "/access-control", label: "Identity & Access", icon: IdCard },
-  { to: "/data-quality", label: "Data Quality", icon: Database },
   { to: "/ai-governance", label: "AI Governance", icon: Bot },
-  { to: "/observability", label: "Observability", icon: Activity },
-  { to: "/compliance", label: "Compliance", icon: Shield },
+  { to: "/platform-logs", label: "Error Logs", icon: Activity },
   { to: "/support-overrides", label: "Support", icon: HandHeart },
 ]
 
 export function AppLayout({ title, userEmail }: AppLayoutProps) {
-  const [navQuery, setNavQuery] = useState("")
+  const filteredNav = useMemo(() => navItems, [])
+  const renderNavItems = (items: NavItem[], level = 0) =>
+    items.map((item) => {
+      const hasChildren = Boolean(item.children?.length)
+      const isTopLevel = level === 0
+      const linkClass = isTopLevel ? "superadmin-nav-item" : "superadmin-subnav-item"
+      const link = (
+        <NavLink
+          key={item.to}
+          to={item.to}
+          className={({ isActive }) => `${linkClass} ${isActive ? "active" : ""}`}
+        >
+          {isTopLevel ? <item.icon size={15} /> : null}
+          {item.label}
+        </NavLink>
+      )
 
-  const filteredNav = useMemo(() => {
-    const query = navQuery.trim().toLowerCase()
-    if (!query) return navItems
-    return navItems.filter((item) => item.label.toLowerCase().includes(query))
-  }, [navQuery])
+      if (!hasChildren) {
+        return isTopLevel ? (
+          <div key={item.to} className="superadmin-nav-group">
+            {link}
+          </div>
+        ) : (
+          link
+        )
+      }
+
+      if (isTopLevel) {
+        return (
+          <div key={item.to} className="superadmin-nav-group">
+            {link}
+            <div className="superadmin-subnav">{renderNavItems(item.children ?? [], level + 1)}</div>
+          </div>
+        )
+      }
+
+      return (
+        <div key={item.to} className="superadmin-subnav-group">
+          {link}
+          <div className="superadmin-subnav nested">{renderNavItems(item.children ?? [], level + 1)}</div>
+        </div>
+      )
+    })
 
   return (
     <div className="superadmin-shell">
       <aside className="superadmin-sidebar">
         <h2>{title}</h2>
         <p>{userEmail}</p>
-        <div className="superadmin-search">
-          <Search size={14} />
-          <input
-            placeholder="Search modules"
-            value={navQuery}
-            onChange={(event) => setNavQuery(event.target.value)}
-          />
-        </div>
+        {/* search removed */}
         <nav>
-          {filteredNav.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                `superadmin-nav-item ${isActive ? "active" : ""}`
-              }
-            >
-              <item.icon size={15} />
-              {item.label}
-            </NavLink>
-          ))}
+          {renderNavItems(filteredNav)}
         </nav>
       </aside>
 

@@ -107,6 +107,12 @@
   gap: 8px;
 }
 
+.superadmin-nav-group {
+  display: grid;
+  gap: 6px;
+  position: relative;
+}
+
 .superadmin-nav-item {
   min-height: 42px;
   border-radius: 10px;
@@ -131,6 +137,53 @@
   color: #1f4cc1;
   border-color: #d2def8;
   font-weight: 700;
+}
+
+.superadmin-subnav {
+  display: grid;
+  gap: 6px;
+  padding-left: 26px;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 160ms ease, max-height 160ms ease;
+}
+
+.superadmin-nav-group:hover .superadmin-subnav,
+.superadmin-nav-group:focus-within .superadmin-subnav {
+  opacity: 1;
+  max-height: 400px;
+}
+
+.superadmin-subnav-item {
+  text-decoration: none;
+  font-size: 0.85rem;
+  color: #516183;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.superadmin-subnav-item:hover {
+  background: #f4f7ff;
+  color: #2e56bf;
+}
+
+.superadmin-subnav-item.active {
+  background: #edf2ff;
+  color: #1f4cc1;
+  font-weight: 700;
+}
+
+.superadmin-subnav-group {
+  display: grid;
+  gap: 6px;
+}
+
+.superadmin-subnav.nested {
+  padding-left: 18px;
+  opacity: 1;
+  max-height: 600px;
+  overflow: visible;
 }
 
 .superadmin-content {

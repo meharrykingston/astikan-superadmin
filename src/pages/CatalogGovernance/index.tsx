@@ -348,7 +348,7 @@ export function CatalogGovernancePage() {
                     <input
                       value={selectedTest.governance.coverage}
                       onChange={(event) => updateSelectedMeta({ coverage: event.target.value })}
-                      placeholder="Example: Live in Bengaluru, Pune, and Gurgaon"
+                      placeholder="Example: Live in Delhi, Noida, and Gurgaon"
                     />
                   </label>
                 </div>

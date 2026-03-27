@@ -7,8 +7,12 @@ type ApiEnvelope<T> = {
 }
 
 async function request<T>(path: string, init: RequestInit): Promise<T> {
+  const headers: HeadersInit = { ...(init.headers ?? {}) }
+  if (init.body && !(init.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json'
+  }
   const response = await fetch(`${API_BASE_URL}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...(init.headers ?? {}) },
+    headers,
     ...init,
   })
   const raw = await response.text()
@@ -29,4 +33,8 @@ export function apiPost<T, B>(path: string, body: B) {
 
 export function apiPut<T, B>(path: string, body: B) {
   return request<T>(path, { method: 'PUT', body: JSON.stringify(body) })
+}
+
+export function apiDelete<T>(path: string, body: Record<string, unknown> = {}) {
+  return request<T>(path, { method: 'DELETE', body: JSON.stringify(body) })
 }
