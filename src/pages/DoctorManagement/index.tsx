@@ -342,6 +342,8 @@ export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
       let failed = 0
       for (const row of rows) {
         try {
+          const experienceYears = row.experience ? Number(row.experience) : null
+          const consultationFeeInr = row.consultation_fee ? Number(row.consultation_fee) : null
           const payload: Partial<DoctorAdminDetail> = {
             name: row.name || row.full_name || row["doctor_name"] || "",
             email: row.email || "",
@@ -353,9 +355,9 @@ export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
             verificationStatus: row.verification_status || "draft",
             specializations: row.specializations ? row.specializations.split("|").map((s) => s.trim()).filter(Boolean) : [],
             highestQualification: row.qualification || "",
-            experienceYears: row.experience || "",
+            experienceYears: Number.isFinite(experienceYears) ? experienceYears : null,
             shortBio: row.bio || "",
-            consultationFeeInr: row.consultation_fee || "",
+            consultationFeeInr: Number.isFinite(consultationFeeInr) ? consultationFeeInr : null,
             medicalCouncilNumber: row.medical_council_number || "",
             governmentIdNumber: row.government_id_number || "",
             languages: row.languages ? row.languages.split("|").map((s) => s.trim()).filter(Boolean) : [],

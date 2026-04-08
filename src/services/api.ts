@@ -14,9 +14,9 @@ type ApiEnvelope<T> = {
 }
 
 async function request<T>(path: string, init: RequestInit): Promise<T> {
-  const headers: HeadersInit = { ...(init.headers ?? {}) }
+  const headers = new Headers(init.headers ?? {})
   if (init.body && !(init.body instanceof FormData)) {
-    headers['Content-Type'] = 'application/json'
+    headers.set('Content-Type', 'application/json')
   }
   const response = await fetch(`${API_BASE_URL}${path}`, {
     headers,

@@ -3,23 +3,17 @@ import {
   Activity,
   Bot,
   Building2,
-  Cable,
   ClipboardCheck,
-  CreditCard,
-  Database,
   Dot,
   FlaskConical,
   HandHeart,
   Hospital,
-  IdCard,
   LayoutDashboard,
   Microscope,
   PackagePlus,
-  Shield,
   Stethoscope,
   Syringe,
   UserCheck,
-  Users,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 import { NavLink, Outlet } from "react-router-dom"
