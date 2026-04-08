@@ -1,0 +1,7 @@
+.ops-search {
+  flex: 1;
+}
+
+.ops-search input {
+  width: 100%;
+}

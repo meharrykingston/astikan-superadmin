@@ -79,7 +79,7 @@ export function CostCalculatorPage() {
   const toNum = (value: string) => Number(value.replace(/[^0-9.]/g, ""))
 
   return (
-    <main className="ops-page">
+    <main className="ops-page ops-cost-calculator">
       <header className="ops-head">
         <h1>Corporate Health Cost Calculator</h1>
         <p>Estimate annual budgets, allocation, and service coverage per employee.</p>
@@ -88,8 +88,8 @@ export function CostCalculatorPage() {
       <section className="ops-grid ops-grid--2">
         <article className="ops-card">
           <h2>Company Budget</h2>
-          <label>
-            Employee Count
+          <div className="ops-field">
+            <span>Employee Count</span>
             <input
               type="number"
               min={1}
@@ -97,9 +97,9 @@ export function CostCalculatorPage() {
               onChange={(event) => setEmployeeCount(toNum(event.target.value))}
               placeholder="e.g. 200"
             />
-          </label>
-          <label>
-            Annual Budget / Employee (INR)
+          </div>
+          <div className="ops-field">
+            <span>Annual Budget / Employee (INR)</span>
             <input
               type="number"
               min={0}
@@ -107,7 +107,7 @@ export function CostCalculatorPage() {
               onChange={(event) => setBudgetPerEmployee(toNum(event.target.value))}
               placeholder="e.g. 2000"
             />
-          </label>
+          </div>
           <div className="ops-subsection">
             <h3>Budget Totals</h3>
             <div className="ops-grid ops-grid--2">
@@ -125,81 +125,81 @@ export function CostCalculatorPage() {
 
         <article className="ops-card">
           <h2>Benefit Allocation</h2>
-          <label>
-            Teleconsult Budget / Employee (INR)
+          <div className="ops-field">
+            <span>Teleconsult Budget / Employee (INR)</span>
             <input
               type="number"
               min={0}
               value={teleBudgetPerEmployee}
               onChange={(event) => setTeleBudgetPerEmployee(toNum(event.target.value))}
             />
-          </label>
-          <label>
-            Teleconsult Cost / Visit (INR)
+          </div>
+          <div className="ops-field">
+            <span>Teleconsult Cost / Visit (INR)</span>
             <input
               type="number"
               min={0}
               value={teleUnitCost}
               onChange={(event) => setTeleUnitCost(toNum(event.target.value))}
             />
-          </label>
+          </div>
 
-          <label>
-            OPD Budget / Employee (INR)
+          <div className="ops-field">
+            <span>OPD Budget / Employee (INR)</span>
             <input
               type="number"
               min={0}
               value={opdBudgetPerEmployee}
               onChange={(event) => setOpdBudgetPerEmployee(toNum(event.target.value))}
             />
-          </label>
-          <label>
-            OPD Cost / Visit (INR)
+          </div>
+          <div className="ops-field">
+            <span>OPD Cost / Visit (INR)</span>
             <input
               type="number"
               min={0}
               value={opdUnitCost}
               onChange={(event) => setOpdUnitCost(toNum(event.target.value))}
             />
-          </label>
+          </div>
 
-          <label>
-            Pharmacy Budget / Employee (INR)
+          <div className="ops-field">
+            <span>Pharmacy Budget / Employee (INR)</span>
             <input
               type="number"
               min={0}
               value={pharmacyBudgetPerEmployee}
               onChange={(event) => setPharmacyBudgetPerEmployee(toNum(event.target.value))}
             />
-          </label>
-          <label>
-            Pharmacy Average Order (INR)
+          </div>
+          <div className="ops-field">
+            <span>Pharmacy Average Order (INR)</span>
             <input
               type="number"
               min={0}
               value={pharmacyUnitCost}
               onChange={(event) => setPharmacyUnitCost(toNum(event.target.value))}
             />
-          </label>
+          </div>
 
-          <label>
-            Lab Budget / Employee (INR)
+          <div className="ops-field">
+            <span>Lab Budget / Employee (INR)</span>
             <input
               type="number"
               min={0}
               value={labBudgetPerEmployee}
               onChange={(event) => setLabBudgetPerEmployee(toNum(event.target.value))}
             />
-          </label>
-          <label>
-            Lab Test Average (INR)
+          </div>
+          <div className="ops-field">
+            <span>Lab Test Average (INR)</span>
             <input
               type="number"
               min={0}
               value={labUnitCost}
               onChange={(event) => setLabUnitCost(toNum(event.target.value))}
             />
-          </label>
+          </div>
         </article>
       </section>
 

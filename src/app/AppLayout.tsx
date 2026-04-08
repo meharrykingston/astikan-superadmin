@@ -7,8 +7,10 @@ import {
   ClipboardCheck,
   CreditCard,
   Database,
+  Dot,
   FlaskConical,
   HandHeart,
+  Hospital,
   IdCard,
   LayoutDashboard,
   Microscope,
@@ -99,14 +101,33 @@ const navItems: NavItem[] = [
       { to: "/products/orders", label: "Orders", icon: ClipboardCheck },
     ],
   },
-  { to: "/medicine", label: "Medicine", icon: Syringe },
-  { to: "/cost-calculator", label: "Cost Calculator", icon: CreditCard },
+  {
+    to: "/medicine",
+    label: "Medicine",
+    icon: Syringe,
+    children: [
+      { to: "/medicine", label: "All Medicines", icon: ClipboardCheck },
+      { to: "/medicine/out-of-stock", label: "Out of Stock", icon: ClipboardCheck },
+      { to: "/medicine/orders", label: "Orders", icon: ClipboardCheck },
+      { to: "/medicine/inventory", label: "Inventory", icon: ClipboardCheck },
+    ],
+  },
   { to: "/programs-management", label: "Programs", icon: HandHeart },
-  { to: "/billing-settlement", label: "Credits & Billing", icon: CreditCard },
-  { to: "/catalog-governance", label: "Lab Catalog", icon: FlaskConical },
-  { to: "/ai-governance", label: "AI Governance", icon: Bot },
+  { to: "/hospitals", label: "Hospitals", icon: Hospital },
+  {
+    to: "/lab-tests",
+    label: "Lab Tests",
+    icon: FlaskConical,
+    children: [
+      { to: "/lab-tests", label: "Booked Tests", icon: ClipboardCheck },
+      { to: "/lab-tests/cancelled", label: "Cancelled Tests", icon: ClipboardCheck },
+      { to: "/lab-tests/rescheduled", label: "Rescheduled Tests", icon: ClipboardCheck },
+      { to: "/lab-tests/inventory", label: "Inventory", icon: ClipboardCheck },
+    ],
+  },
+  { to: "/ai-governance", label: "AI Governance Chatbot", icon: Bot },
   { to: "/platform-logs", label: "Error Logs", icon: Activity },
-  { to: "/support-overrides", label: "Support", icon: HandHeart },
+  { to: "/support-overrides", label: "Support CRM", icon: HandHeart },
 ]
 
 export function AppLayout({ title, userEmail }: AppLayoutProps) {
@@ -116,13 +137,14 @@ export function AppLayout({ title, userEmail }: AppLayoutProps) {
       const hasChildren = Boolean(item.children?.length)
       const isTopLevel = level === 0
       const linkClass = isTopLevel ? "superadmin-nav-item" : "superadmin-subnav-item"
+      const Icon = item.icon ?? Dot
       const link = (
         <NavLink
           key={item.to}
           to={item.to}
           className={({ isActive }) => `${linkClass} ${isActive ? "active" : ""}`}
         >
-          {isTopLevel ? <item.icon size={15} /> : null}
+          <Icon size={isTopLevel ? 18 : 14} className={isTopLevel ? "" : "superadmin-subnav-icon"} />
           {item.label}
         </NavLink>
       )

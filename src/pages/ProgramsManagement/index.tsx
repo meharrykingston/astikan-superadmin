@@ -143,6 +143,7 @@ export function ProgramsManagementPage() {
   const [campaigns, setCampaigns] = useState<HealthAssessmentCampaign[]>([])
   const [notice, setNotice] = useState("")
   const [campaignNotice, setCampaignNotice] = useState("")
+  const [loading, setLoading] = useState(true)
   const [form, setForm] = useState({
     title: "",
     type: "Fitness Challenge" as ProgramType,
@@ -177,8 +178,11 @@ export function ProgramsManagementPage() {
   })
 
   useEffect(() => {
+    setLoading(true)
     setPrograms(loadPrograms())
     setCampaigns(loadCampaigns())
+    const timer = window.setTimeout(() => setLoading(false), 300)
+    return () => window.clearTimeout(timer)
   }, [])
 
   useEffect(() => {
@@ -306,6 +310,13 @@ export function ProgramsManagementPage() {
         <h1>Health Programs Management</h1>
         <p>Create fitness, mental health, and camp-based programs for corporate enrollment.</p>
       </header>
+
+      {loading ? (
+        <div className="ops-loader-fullscreen">
+          <div className="ops-spinner" />
+          <span>Loading programs...</span>
+        </div>
+      ) : null}
 
       <section className="ops-grid">
         <article className="ops-card">

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
-import { Plus, Pencil, Trash2, X, UserPlus, UploadCloud } from "lucide-react"
+import { Eye, EyeOff, Plus, Pencil, Trash2, X, UserPlus, UploadCloud } from "lucide-react"
 import "../operations.css"
 import {
   fetchDoctorsAdmin,
@@ -119,18 +119,24 @@ type DoctorManagementProps = {
 
 export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
   const [showActions, setShowActions] = useState(false)
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [confirmBulkDelete, setConfirmBulkDelete] = useState<string[] | null>(null)
+  const [deletingBulk, setDeletingBulk] = useState(false)
   const [formMode, setFormMode] = useState<"add" | "edit" | null>(null)
   const [formStep, setFormStep] = useState(1)
   const [formData, setFormData] = useState<DoctorFormState>(emptyForm)
+  const [revealedPasswords, setRevealedPasswords] = useState<Record<string, boolean>>({})
   const [confirmDelete, setConfirmDelete] = useState<DoctorAdminRecord | null>(null)
   const [viewDoctor, setViewDoctor] = useState<DoctorAdminDetail | null>(null)
   const [viewStep, setViewStep] = useState(1)
   const [saving, setSaving] = useState(false)
+  const [validationErrors, setValidationErrors] = useState<{ medicalCouncilNumber?: string; governmentIdNumber?: string }>({})
   const [showUploadModal, setShowUploadModal] = useState(false)
   const [uploadFile, setUploadFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
   const [uploadSummary, setUploadSummary] = useState<{ created: number; failed: number } | null>(null)
   const [profilePhotoFile, setProfilePhotoFile] = useState<File | null>(null)
+  const [profilePhotoPreview, setProfilePhotoPreview] = useState<string>("")
   const [governmentIdFile, setGovernmentIdFile] = useState<File | null>(null)
   const [licenseFile, setLicenseFile] = useState<File | null>(null)
   const [doctors, setDoctors] = useState<DoctorAdminRecord[]>([])
@@ -153,6 +159,16 @@ export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
       setPage(1)
     }
   }, [initialFilter])
+
+  useEffect(() => {
+    if (!profilePhotoFile) {
+      setProfilePhotoPreview("")
+      return
+    }
+    const nextUrl = URL.createObjectURL(profilePhotoFile)
+    setProfilePhotoPreview(nextUrl)
+    return () => URL.revokeObjectURL(nextUrl)
+  }, [profilePhotoFile])
 
   const buildAvatar = (name: string) => {
     const initials =
@@ -404,6 +420,24 @@ export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
   }
 
   const handleSave = async () => {
+    const trimValue = (value: string) => value.trim()
+    const medicalCouncilNumber = trimValue(formData.medicalCouncilNumber)
+    const governmentIdNumber = trimValue(formData.governmentIdNumber)
+    const nextErrors: { medicalCouncilNumber?: string; governmentIdNumber?: string } = {}
+
+    if (medicalCouncilNumber && !/^[A-Z0-9\-\/]{6,20}$/i.test(medicalCouncilNumber)) {
+      nextErrors.medicalCouncilNumber = "Enter 6-20 chars (letters, numbers, / or -)."
+    }
+    if (governmentIdNumber && !/^[A-Z0-9\-]{6,20}$/i.test(governmentIdNumber)) {
+      nextErrors.governmentIdNumber = "Enter 6-20 chars (letters, numbers, or -)."
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setValidationErrors(nextErrors)
+      return
+    }
+
+    setValidationErrors({})
     const payload: Partial<DoctorAdminDetail> = {
       name: formData.name,
       email: formData.email,
@@ -425,8 +459,8 @@ export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
       experienceYears: formData.experienceYears ? Number(formData.experienceYears) : undefined,
       shortBio: formData.shortBio,
       consultationFeeInr: formData.consultationFeeInr ? Number(formData.consultationFeeInr) : undefined,
-      medicalCouncilNumber: formData.medicalCouncilNumber,
-      governmentIdNumber: formData.governmentIdNumber,
+      medicalCouncilNumber,
+      governmentIdNumber,
       languages: formData.languages,
       practiceAddress: formData.practiceAddress,
       availability: formData.availability,
@@ -476,6 +510,41 @@ export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
   const filteredDoctors = statusFilter
     ? doctors.filter((doc) => doc.status === statusFilter)
     : doctors
+
+  const selectedCount = selectedIds.length
+  const pageIds = filteredDoctors.map((doctor) => doctor.id)
+  const isAllSelected = pageIds.length > 0 && pageIds.every((id) => selectedIds.includes(id))
+
+  useEffect(() => {
+    setSelectedIds((prev) => prev.filter((id) => pageIds.includes(id)))
+  }, [pageIds.join("|")])
+
+  const toggleSelected = (id: string) => {
+    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]))
+  }
+
+  const toggleSelectAll = () => {
+    setSelectedIds((prev) => {
+      if (isAllSelected) return prev.filter((id) => !pageIds.includes(id))
+      const merged = new Set([...prev, ...pageIds])
+      return Array.from(merged)
+    })
+  }
+
+  const handleBulkDelete = async () => {
+    if (!confirmBulkDelete || confirmBulkDelete.length === 0) return
+    try {
+      setDeletingBulk(true)
+      await Promise.all(confirmBulkDelete.map((id) => deleteDoctorAdmin(id)))
+      setConfirmBulkDelete(null)
+      setSelectedIds([])
+      await loadPage(page)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to delete doctors")
+    } finally {
+      setDeletingBulk(false)
+    }
+  }
 
   return (
     <main className="ops-page">
@@ -549,21 +618,43 @@ export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
         </article>
       </section>
 
+      {loading ? (
+        <div className="ops-loader-fullscreen">
+          <div className="ops-spinner" />
+          <span>Loading doctors...</span>
+        </div>
+      ) : null}
+
       <section className="ops-table-wrap">
-        {loading ? (
-          <div className="ops-loader">
-            <div className="ops-spinner" />
-            <span>Loading doctors...</span>
-          </div>
-        ) : null}
         {!loading && error && <div className="ops-kpi-sub">{error}</div>}
         {initialFilter ? (
           <div className="ops-filter-pill">Showing: {statusFilter}</div>
         ) : null}
+        {selectedCount > 0 && (
+          <div className="ops-table-actions">
+            <div className="ops-kpi-sub">{selectedCount} selected</div>
+            <button
+              type="button"
+              className="ops-icon-btn danger"
+              onClick={() => setConfirmBulkDelete(selectedIds)}
+              aria-label="Delete selected doctors"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
+        )}
         {!loading && (
         <table className="ops-table">
           <thead>
             <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  checked={isAllSelected}
+                  onChange={toggleSelectAll}
+                  aria-label="Select all doctors on page"
+                />
+              </th>
               <th>Profile</th>
               <th>Name</th>
               <th>Username</th>
@@ -589,6 +680,15 @@ export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
                 }}
               >
                 <td>
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.includes(doctor.id)}
+                    onChange={() => toggleSelected(doctor.id)}
+                    onClick={(event) => event.stopPropagation()}
+                    aria-label={`Select ${doctor.name}`}
+                  />
+                </td>
+                <td>
                   <img
                     className="ops-table-avatar"
                     src={doctor.image ?? buildAvatar(doctor.name)}
@@ -600,7 +700,33 @@ export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
                 </td>
                 <td>{doctor.name}</td>
                 <td>{doctor.username}</td>
-                <td>{doctor.password}</td>
+                <td>
+                  <div className="ops-pass-cell">
+                    <span>
+                      {revealedPasswords[doctor.id]
+                        ? doctor.password || "--"
+                        : doctor.password
+                          ? "••••••••"
+                          : "--"}
+                    </span>
+                    {doctor.password ? (
+                      <button
+                        type="button"
+                        className="icon"
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          setRevealedPasswords((prev) => ({
+                            ...prev,
+                            [doctor.id]: !prev[doctor.id],
+                          }))
+                        }}
+                        aria-label={revealedPasswords[doctor.id] ? "Hide password" : "Show password"}
+                      >
+                        {revealedPasswords[doctor.id] ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    ) : null}
+                  </div>
+                </td>
                 <td>{doctor.email}</td>
                 <td>{doctor.phone}</td>
                 <td>{doctor.specialty}</td>
@@ -717,6 +843,12 @@ export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
                 <label className="ops-span">
                   Upload Profile Photo
                   <input type="file" accept="image/*" onChange={(event) => setProfilePhotoFile(event.target.files?.[0] ?? null)} />
+                  {profilePhotoPreview ? (
+                    <div className="ops-upload-preview">
+                      <img src={profilePhotoPreview} alt="Profile preview" />
+                      <span>Preview</span>
+                    </div>
+                  ) : null}
                 </label>
                 <label>
                   Specializations (comma separated)
@@ -742,10 +874,12 @@ export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
                 <label>
                   Medical Council Number
                   <input value={formData.medicalCouncilNumber} onChange={(event) => updateForm({ medicalCouncilNumber: event.target.value })} />
+                  {validationErrors.medicalCouncilNumber ? <span className="ops-field-error">{validationErrors.medicalCouncilNumber}</span> : null}
                 </label>
                 <label>
                   Government ID Number
                   <input value={formData.governmentIdNumber} onChange={(event) => updateForm({ governmentIdNumber: event.target.value })} />
+                  {validationErrors.governmentIdNumber ? <span className="ops-field-error">{validationErrors.governmentIdNumber}</span> : null}
                 </label>
                 <label className="ops-span">
                   Upload Government ID (PDF / Image)
@@ -948,6 +1082,28 @@ export function DoctorManagementPage({ initialFilter }: DoctorManagementProps) {
                 }}
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmBulkDelete && (
+        <div className="ops-modal">
+          <div className="ops-modal-card">
+            <div className="ops-modal-head">
+              <h2>Delete Doctors</h2>
+              <button type="button" className="ops-modal-close icon" onClick={() => setConfirmBulkDelete(null)} aria-label="Close">
+                <X size={16} />
+              </button>
+            </div>
+            <p className="ops-kpi-sub">
+              Delete {confirmBulkDelete.length} doctors? This cannot be undone.
+            </p>
+            <div className="ops-actions ops-actions-right">
+              <button type="button" className="secondary" onClick={() => setConfirmBulkDelete(null)}>Cancel</button>
+              <button type="button" className="primary" onClick={handleBulkDelete} disabled={deletingBulk}>
+                {deletingBulk ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>

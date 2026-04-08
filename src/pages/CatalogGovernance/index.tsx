@@ -35,8 +35,14 @@ type GovernanceMeta = {
 }
 
 const STORAGE_KEY = "superadmin:lab-governance"
+const RAW_BASE = import.meta.env.VITE_API_BASE_URL
+const PROD_BASE = "https://astikan-backend-production.up.railway.app/api"
+const DEV_BASE = "/api"
+const DEFAULT_BASE = import.meta.env.DEV ? DEV_BASE : PROD_BASE
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, "") ?? "/api"
+  typeof RAW_BASE === "string" && RAW_BASE.trim() && RAW_BASE !== "undefined" && RAW_BASE !== "null"
+    ? RAW_BASE.replace(/\/+$/, "")
+    : DEFAULT_BASE
 
 async function fetchLabCatalog(): Promise<LabCatalogResponse> {
   const response = await fetch(`${API_BASE_URL}/lab/catalog?limit=60&offset=0`, {
@@ -236,6 +242,13 @@ export function CatalogGovernancePage() {
         </article>
       </section>
 
+      {loading ? (
+        <div className="ops-loader-fullscreen">
+          <div className="ops-spinner" />
+          <span>Loading lab catalog...</span>
+        </div>
+      ) : null}
+
       <section className="catalog-workspace">
         <section className="catalog-list-panel">
           <div className="catalog-toolbar">
@@ -262,7 +275,6 @@ export function CatalogGovernancePage() {
             <span>{filteredTests.length} tests shown</span>
           </div>
 
-          {loading ? <div className="catalog-empty">Loading live Niramaya lab tests...</div> : null}
           {error ? <div className="catalog-empty error">{error}</div> : null}
 
           {!loading && !error ? (

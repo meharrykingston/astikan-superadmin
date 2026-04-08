@@ -3,7 +3,6 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import { AppLayout } from "./app/AppLayout"
 import { AccessControlPage } from "./pages/AccessControl"
 import { AIGovernancePage } from "./pages/AIGovernance"
-import { BillingSettlementPage } from "./pages/BillingSettlement"
 import { CatalogGovernancePage } from "./pages/CatalogGovernance"
 import { CompliancePage } from "./pages/Compliance"
 import { CorporateAccountsPage } from "./pages/CorporateAccounts"
@@ -12,8 +11,8 @@ import { DataQualityPage } from "./pages/DataQuality"
 import { DoctorAnalyticsPage } from "./pages/DoctorAnalytics"
 import { DoctorManagementPage } from "./pages/DoctorManagement"
 import { DoctorProductsPage } from "./pages/DoctorProducts"
-import { CostCalculatorPage } from "./pages/CostCalculator"
 import { IntegrationsPage } from "./pages/Integrations"
+import { HospitalsPage } from "./pages/Hospitals"
 import { LoginPage } from "./pages/Login"
 import { ObservabilityPage } from "./pages/Observability"
 import { OPDAnalyticsPage } from "./pages/OPDAnalytics"
@@ -115,8 +114,11 @@ function App() {
             <Route path="doctors/inactive" element={<DoctorManagementPage initialFilter="Inactive" />} />
             <Route path="doctors/active" element={<DoctorManagementPage initialFilter="Active" />} />
             <Route path="products" element={<DoctorProductsPage />} />
+            <Route path="products/categories" element={<DoctorProductsPage />} />
             <Route path="medicine" element={<PharmacyOperationsPage />} />
-            <Route path="cost-calculator" element={<CostCalculatorPage />} />
+            <Route path="medicine/out-of-stock" element={<PharmacyOperationsPage />} />
+            <Route path="medicine/orders" element={<PharmacyOperationsPage />} />
+            <Route path="medicine/inventory" element={<PharmacyOperationsPage />} />
             <Route path="platform-logs" element={<PlatformLogsPage />} />
             <Route path="consultations/tele" element={<ConsultationsPage title="Teleconsultation" subtitle="All consultations" />} />
             <Route path="consultations/tele/upcoming" element={<ConsultationsPage title="Teleconsultation" subtitle="Upcoming consultations" />} />
@@ -130,14 +132,18 @@ function App() {
             <Route path="doctor-analytics" element={<DoctorAnalyticsPage />} />
             <Route path="opd-analytics" element={<OPDAnalyticsPage />} />
             <Route path="programs-management" element={<ProgramsManagementPage />} />
+            <Route path="hospitals" element={<HospitalsPage />} />
             <Route path="tenant-management" element={<TenantManagementPage />} />
             <Route path="access-control" element={<AccessControlPage />} />
             <Route path="integrations" element={<IntegrationsPage />} />
             <Route path="payroll" element={<PayrollPage />} />
             <Route path="payroll/setup" element={<PayrollPage subtitle="Setup payroll" />} />
             <Route path="catalog-governance" element={<CatalogGovernancePage />} />
+            <Route path="lab-tests" element={<CatalogGovernancePage />} />
+            <Route path="lab-tests/cancelled" element={<CatalogGovernancePage />} />
+            <Route path="lab-tests/rescheduled" element={<CatalogGovernancePage />} />
+            <Route path="lab-tests/inventory" element={<CatalogGovernancePage />} />
             <Route path="data-quality" element={<DataQualityPage />} />
-            <Route path="billing-settlement" element={<BillingSettlementPage />} />
             <Route path="ai-governance" element={<AIGovernancePage />} />
             <Route path="observability" element={<ObservabilityPage />} />
             <Route path="compliance" element={<CompliancePage />} />

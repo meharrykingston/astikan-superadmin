@@ -20,6 +20,19 @@
   gap: 12px;
 }
 
+.admin-login-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-login-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
 .admin-login-kicker {
   margin: 0;
   font-size: 0.75rem;
@@ -54,6 +67,25 @@
   border-radius: 12px;
   background: #fff;
   padding: 0 12px;
+}
+
+.admin-input-wrap {
+  position: relative;
+}
+
+.admin-input-wrap .admin-input {
+  padding-right: 44px;
+}
+
+.admin-eye-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: #5f6b85;
+  cursor: pointer;
 }
 
 .admin-input:focus {

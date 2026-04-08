@@ -1,1 +1,138 @@
-.support-overrides-page {}
+.support-overrides-page {
+  display: grid;
+  gap: 20px;
+}
+
+.support-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.support-head .primary {
+  border: 0;
+  background: #1d4ed8;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.support-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 20px;
+}
+
+.support-list {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e3e9f6;
+  padding: 16px;
+}
+
+.support-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.support-filters input,
+.support-filters select {
+  border: 1px solid #d7e2f6;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+}
+
+.support-tickets {
+  display: grid;
+  gap: 10px;
+}
+
+.support-ticket {
+  border: 1px solid #e1e8f6;
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  background: #f8faff;
+}
+
+.support-ticket.active {
+  border-color: #1d4ed8;
+  background: #eef2ff;
+}
+
+.support-ticket strong {
+  display: block;
+}
+
+.support-ticket span {
+  color: #5b6b87;
+  font-size: 0.85rem;
+}
+
+.support-detail {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e3e9f6;
+  padding: 16px;
+  display: grid;
+  gap: 16px;
+}
+
+.support-detail-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.support-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.support-detail-grid span {
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.support-resolution textarea {
+  width: 100%;
+  border: 1px solid #d7e2f6;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin: 10px 0;
+}
+
+.pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.pill.open {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.pill.pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.pill.resolved {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+@media (max-width: 1100px) {
+  .support-grid {
+    grid-template-columns: 1fr;
+  }
+}

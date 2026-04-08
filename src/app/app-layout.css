@@ -1,13 +1,13 @@
 .superadmin-shell {
   min-height: 100dvh;
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 320px 1fr;
 }
 
 .superadmin-sidebar {
   border-right: 1px solid var(--line);
   background: #fff;
-  padding: 20px 14px;
+  padding: 24px 18px;
   position: sticky;
   top: 0;
   height: 100dvh;
@@ -16,13 +16,13 @@
 
 .superadmin-sidebar h2 {
   margin: 0;
-  font-size: 1.16rem;
+  font-size: 1.3rem;
 }
 
 .superadmin-sidebar p {
   margin: 6px 0 14px;
   color: var(--muted);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
 }
 
 .superadmin-search {
@@ -114,15 +114,15 @@
 }
 
 .superadmin-nav-item {
-  min-height: 42px;
-  border-radius: 10px;
+  min-height: 48px;
+  border-radius: 12px;
   text-decoration: none;
   color: #2f3c56;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 11px;
-  font-size: 0.92rem;
+  gap: 10px;
+  padding: 0 14px;
+  font-size: 1rem;
   border: 1px solid transparent;
   transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
 }
@@ -142,7 +142,7 @@
 .superadmin-subnav {
   display: grid;
   gap: 6px;
-  padding-left: 26px;
+  padding-left: 32px;
   opacity: 0;
   max-height: 0;
   overflow: hidden;
@@ -157,10 +157,13 @@
 
 .superadmin-subnav-item {
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 0.93rem;
   color: #516183;
-  padding: 6px 10px;
-  border-radius: 8px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .superadmin-subnav-item:hover {
@@ -180,10 +183,14 @@
 }
 
 .superadmin-subnav.nested {
-  padding-left: 18px;
+  padding-left: 22px;
   opacity: 1;
   max-height: 600px;
   overflow: visible;
+}
+
+.superadmin-subnav-icon {
+  color: #93a0ba;
 }
 
 .superadmin-content {
